@@ -1,0 +1,59 @@
+{
+  "expo": {
+    "name": "Cali Boost Ai",
+    "slug": "cali-boost-ai",
+    "scheme": "cali-boost-ai",
+    "newArchEnabled": true,
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "owner": "dmytroexpo",
+    "extra": {
+      "GEMINI_API_KEY": "AIzaSyBpBN4UsDxDDKbXP3l3XVFo9dxOGfZ956A",
+      "eas": {
+        "projectId": "ef4767ac-bfd9-46c4-bd0d-d48cf2867c0e"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/ef4767ac-bfd9-46c4-bd0d-d48cf2867c0e",
+      "fallbackToCacheTimeout": 300000
+    },
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1A1A1A"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.ma.caliBoostAI",
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#1A1A1A"
+      },
+      "package": "com.ma.caliBoostAI",
+      "versionCode": 3,
+      "permissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.CAMERA"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Cali Boost Ai accesses your photos to save and share photos of recipes you list. Only photos you select will be included in your recipe listing. You can change this in the Cali Boost Ai app settings"
+        }
+      ]
+    ]
+  }
+}
