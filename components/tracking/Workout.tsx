@@ -192,9 +192,11 @@ const Workout = ({ dailyData }: WorkoutProps) => {
       <View style={styles.workoutItem}>
         <View style={styles.workoutItemLeft}>
           <Text style={styles.workoutTitle}>Walking</Text>
-          <Text style={styles.workoutCalories}>⚡{dailyData?.calories.burned || 0} Cal</Text>
+          <Text style={styles.workoutTitle}>60mins</Text>
+          {/* <Text style={styles.workoutCalories}>⚡{dailyData?.calories.burned || 0} Cal</Text> */}
+          <Text style={styles.workoutCalories}>⚡190 Cal</Text>
         </View>
-        <View style={styles.workoutProgress}>
+        {/* <View style={styles.workoutProgress}>
           <View style={styles.progressBarBackground}>
             <View style={[styles.progressBar, { width: '60%', backgroundColor: '#FF5722' }]} />
           </View>
@@ -202,7 +204,7 @@ const Workout = ({ dailyData }: WorkoutProps) => {
             <Text style={styles.workoutStats}>0</Text>
             <Text style={styles.workoutStats}>4000 Steps</Text>
           </View>
-        </View>
+        </View> */}
 
         <TouchableOpacity
           style={styles.addWorkoutButton}
@@ -375,6 +377,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#D9616A',
     width: 200,
     borderRadius: 12,
+    marginTop: 10,
     margin: 'auto',
   },
   addWorkoutText: {

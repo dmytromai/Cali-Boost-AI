@@ -6,7 +6,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { BarChart } from "react-native-gifted-charts";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { DailyData } from '@/types';
 import { getDailyData } from '@/utils/storage';
 
@@ -15,6 +16,14 @@ const NutritionChart = () => {
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState('');
 
+  // Use useFocusEffect to reload data when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      loadWeekData();
+    }, [])
+  );
+
+  // Initial load
   useEffect(() => {
     loadWeekData();
   }, []);
@@ -103,7 +112,7 @@ const NutritionChart = () => {
         <Text style={styles.sectionTitle}>Nutrition (%)</Text>
         <TouchableOpacity style={styles.dateSelector}>
           <Text style={styles.dateText}>{dateRange}</Text>
-          <Ionicons name="chevron-forward" size={20} color="#888" />
+          {/* <Ionicons name="chevron-forward" size={20} color="#888" /> */}
         </TouchableOpacity>
       </View>
       {loading ? (
@@ -125,10 +134,12 @@ const NutritionChart = () => {
           yAxisColor="white"
           yAxisTextStyle={{
             color: 'white',
+            fontSize: 8,
           }}
           barBorderRadius={5}
           xAxisLabelTextStyle={{
             color: 'white',
+            fontSize: 8,
           }}
         />
       )}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   Image,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 import BackgroundImage from '@/components/layout/BackgroundImage';
 import ProfileHeader from '@/components/layout/ProfileHeader';
 import WeightChart from '@/components/dashboard/WeightChart';
@@ -71,10 +72,6 @@ const DashboardScreen = () => {
     return age.toString();
   };
 
-  useEffect(() => {
-    loadProfileData();
-  }, []);
-
   const loadProfileData = async () => {
     try {
       const experienceData = await AsyncStorage.getItem('experience');
@@ -88,6 +85,18 @@ const DashboardScreen = () => {
       setLoading(false);
     }
   };
+
+  // Use useFocusEffect to reload data when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      loadProfileData();
+    }, [])
+  );
+
+  // Initial load
+  useEffect(() => {
+    loadProfileData();
+  }, []);
 
   const activityLevels: ActivityLevel[] = [
     { label: 'Basal metabolic rate', calories: 1654 },
