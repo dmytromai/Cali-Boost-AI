@@ -8,153 +8,37 @@ import {
   ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { DailyData } from '@/types';
+import { DailyData, ExerciseEntry } from '@/types';
 import { useState, useEffect } from 'react';
-import Constants from 'expo-constants';
+import STATIC_EXERCISES from '../../constants/ExerciseCalories';
+import { saveDailyData, getDailyData } from '../../utils/storage';
 
 interface WorkoutProps {
   dailyData: DailyData | null;
+  onDataChange?: () => void;
 }
 
-// Get API key from environment variables
-const NINJAS_API_KEY = Constants.expoConfig?.extra?.NINJAS_API_KEY;
-const FATSECRET_CLIENT_ID = Constants.expoConfig?.extra?.FATSECRET_CLIENT_ID;
-const FATSECRET_CLIENT_SECRET = Constants.expoConfig?.extra?.FATSECRET_CLIENT_SECRET;
-
-if (!NINJAS_API_KEY || !FATSECRET_CLIENT_ID || !FATSECRET_CLIENT_SECRET) {
-  console.error('API_KEY is not defined in environment variables');
-}
-
-interface Exercise {
-  name: string;
-  type: string;
-  muscle: string;
-  equipment: string;
-  difficulty: string;
-  instructions: string;
-}
-
-interface CaloriesBurned {
-  name: string;
-  calories_per_hour: number;
-  duration_minutes: number;
-  total_calories: number;
-}
-
-// Calorie burn rates per minute for different activities (approximate values)
-const WORKOUT_CALORIES = {
-  walking: 4,
-  running: 10,
-  cycling: 7,
-  swimming: 8,
-  weightlifting: 5,
-  yoga: 3,
-  dancing: 6,
-};
-
-const Workout = ({ dailyData }: WorkoutProps) => {
+const Workout = ({ dailyData, onDataChange }: WorkoutProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedWorkout, setSelectedWorkout] = useState('');
   const [duration, setDuration] = useState('');
   const [calculatedCalories, setCalculatedCalories] = useState(0);
-  const [exercises, setExercises] = useState<Exercise[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [calculatingCalories, setCalculatingCalories] = useState(false);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [exercises, setExercises] = useState<ExerciseEntry[]>([]);
 
+  // Load exercises for the current date
   useEffect(() => {
-    fetchExercises();
-  }, []);
-
-  // Function to get FatSecret access token
-  const getFatSecretAccessToken = async () => {
-    try {
-      const response = await fetch('https://oauth.fatsecret.com/connect/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': `Basic ${btoa(`${FATSECRET_CLIENT_ID}:${FATSECRET_CLIENT_SECRET}`)}`
-        },
-        body: new URLSearchParams({
-          'scope': 'premier',
-          'grant_type': 'client_credentials',
-        }).toString()
+    if (dailyData?.date) {
+      getDailyData(dailyData.date).then((data) => {
+        setExercises(data?.exercises || []);
       });
-
-      const data = await response.json();
-      console.log("FatSecret API Result:", data);
-      if (data.access_token) {
-        setAccessToken(data.access_token);
-        return data.access_token;
-      }
-      throw new Error('Failed to get access token');
-    } catch (error) {
-      console.error('Error getting access token:', error);
-      return null;
     }
-  };
+  }, [dailyData?.date]);
 
-  const fetchExercises = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await fetch(
-        'https://api.api-ninjas.com/v1/exercises?muscle=biceps',
-        {
-          headers: {
-            'X-Api-Key': NINJAS_API_KEY || '',
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setExercises(data);
-    } catch (err) {
-      console.error('Error fetching exercises:', err);
-      setError('Failed to fetch exercises. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const calculateCalories = async (workoutType: string, minutes: number) => {
-    try {
-      setCalculatingCalories(true);
-      setError(null);
-
-      const response = await fetch(
-        `https://api.api-ninjas.com/v1/caloriesburned?activity=${workoutType}&weight=70&duration=${minutes}`,
-        {
-          headers: {
-            'X-Api-Key': NINJAS_API_KEY || '',
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data: CaloriesBurned[] = await response.json();
-      console.log(data);
-      if (data && data.length > 0) {
-        setCalculatedCalories(data[0].total_calories);
-      } else {
-        setCalculatedCalories(0);
-      }
-    } catch (err) {
-      console.error('Error calculating calories:', err);
-      setError('Failed to calculate calories. Please try again.');
-      setCalculatedCalories(0);
-    } finally {
-      setCalculatingCalories(false);
-    }
+  // New calorie calculation using static data
+  const calculateCalories = (workoutName: string, minutes: number) => {
+    const exercise = STATIC_EXERCISES.find(e => e.name === workoutName);
+    if (!exercise) return 0;
+    return Math.round((exercise.caloriesPer30Min / 30) * minutes);
   };
 
   const handleDurationChange = (text: string) => {
@@ -162,8 +46,12 @@ const Workout = ({ dailyData }: WorkoutProps) => {
     if (selectedWorkout && text) {
       const minutes = parseInt(text);
       if (!isNaN(minutes)) {
-        calculateCalories(selectedWorkout, minutes);
+        setCalculatedCalories(calculateCalories(selectedWorkout, minutes));
+      } else {
+        setCalculatedCalories(0);
       }
+    } else {
+      setCalculatedCalories(0);
     }
   };
 
@@ -172,39 +60,75 @@ const Workout = ({ dailyData }: WorkoutProps) => {
     if (duration) {
       const minutes = parseInt(duration);
       if (!isNaN(minutes)) {
-        calculateCalories(workout, minutes);
+        setCalculatedCalories(calculateCalories(workout, minutes));
+      } else {
+        setCalculatedCalories(0);
       }
+    } else {
+      setCalculatedCalories(0);
     }
   };
 
-  const handleAddWorkout = () => {
-    // Here you would typically save the workout data
-    // For now, we'll just close the modal
+  const handleAddWorkout = async () => {
+    if (!dailyData?.date || !selectedWorkout || !duration) return;
+    const minutes = parseInt(duration);
+    if (isNaN(minutes)) return;
+    const calories = calculateCalories(selectedWorkout, minutes);
+    const newExercise: ExerciseEntry = {
+      id: Date.now().toString(),
+      name: selectedWorkout,
+      duration: minutes,
+      calories,
+      time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+    };
+    // Get current data, add exercise, update calories.burned
+    const currentData = await getDailyData(dailyData.date) || { ...dailyData, exercises: [] };
+    const updatedExercises = [...(currentData.exercises || []), newExercise];
+    const updatedData = {
+      ...currentData,
+      exercises: updatedExercises,
+      calories: {
+        ...currentData.calories,
+        burned: (currentData.calories?.burned || 0) + calories,
+      },
+    };
+    await saveDailyData(dailyData.date, updatedData);
+    setExercises(updatedExercises);
+    if (typeof onDataChange === 'function') onDataChange();
     setModalVisible(false);
     setSelectedWorkout('');
     setDuration('');
     setCalculatedCalories(0);
   };
 
+  // Calculate total burned calories from exercises
+  const totalBurned = exercises.reduce((sum, ex) => sum + ex.calories, 0);
+
   return (
     <View style={styles.burnedSection}>
       <Text style={styles.sectionTitle}>Burned</Text>
+      
+      {/* Summary item */}
       <View style={styles.workoutItem}>
         <View style={styles.workoutItemLeft}>
-          <Text style={styles.workoutTitle}>Walking</Text>
-          <Text style={styles.workoutTitle}>60mins</Text>
-          {/* <Text style={styles.workoutCalories}>⚡{dailyData?.calories.burned || 0} Cal</Text> */}
-          <Text style={styles.workoutCalories}>⚡190 Cal</Text>
+          <Text style={styles.workoutTitle}>Total</Text>
+          <Text style={styles.workoutCalories}>⚡{totalBurned} Cal</Text>
         </View>
-        {/* <View style={styles.workoutProgress}>
-          <View style={styles.progressBarBackground}>
-            <View style={[styles.progressBar, { width: '60%', backgroundColor: '#FF5722' }]} />
+
+        {/* List of saved exercises */}
+        {exercises.length > 0 && (
+          <View style={{ marginBottom: 15 }}>
+            {exercises.map((ex) => (
+              <View key={ex.id}>
+                <View style={styles.workoutItemLeft}>
+                  <Text style={styles.workoutTitle}>{ex.name}</Text>
+                  <Text style={[styles.workoutTitle, styles.workoutDuration]}>{ex.duration} mins</Text>
+                  <Text style={styles.workoutCalories}>⚡{ex.calories} Cal</Text>
+                </View>
+              </View>
+            ))}
           </View>
-          <View style={styles.workoutStatsContainer}>
-            <Text style={styles.workoutStats}>0</Text>
-            <Text style={styles.workoutStats}>4000 Steps</Text>
-          </View>
-        </View> */}
+        )}
 
         <TouchableOpacity
           style={styles.addWorkoutButton}
@@ -230,41 +154,28 @@ const Workout = ({ dailyData }: WorkoutProps) => {
               </TouchableOpacity>
             </View>
 
-            {loading ? (
-              <View style={styles.loadingContainer}>
-                <Text style={styles.loadingText}>Loading exercises...</Text>
-              </View>
-            ) : error ? (
-              <View style={styles.errorContainer}>
-                <Text style={styles.errorText}>{error}</Text>
-                <TouchableOpacity style={styles.retryButton} onPress={fetchExercises}>
-                  <Text style={styles.retryButtonText}>Retry</Text>
+            <ScrollView style={styles.workoutOptions}>
+              {STATIC_EXERCISES.map((exercise) => (
+                <TouchableOpacity
+                  key={exercise.name}
+                  style={[
+                    styles.workoutOption,
+                    selectedWorkout === exercise.name && styles.selectedWorkout
+                  ]}
+                  onPress={() => handleWorkoutSelect(exercise.name)}
+                >
+                  <Text style={[
+                    styles.workoutOptionText,
+                    selectedWorkout === exercise.name && styles.selectedWorkoutText
+                  ]}>
+                    {exercise.name}
+                  </Text>
+                  <Text style={styles.workoutDetails}>
+                    {exercise.caloriesPer30Min} Cal / 30 min
+                  </Text>
                 </TouchableOpacity>
-              </View>
-            ) : (
-              <ScrollView style={styles.workoutOptions}>
-                {exercises.map((exercise) => (
-                  <TouchableOpacity
-                    key={exercise.name}
-                    style={[
-                      styles.workoutOption,
-                      selectedWorkout === exercise.name && styles.selectedWorkout
-                    ]}
-                    onPress={() => handleWorkoutSelect(exercise.name)}
-                  >
-                    <Text style={[
-                      styles.workoutOptionText,
-                      selectedWorkout === exercise.name && styles.selectedWorkoutText
-                    ]}>
-                      {exercise.name}
-                    </Text>
-                    <Text style={styles.workoutDetails}>
-                      {exercise.muscle} • {exercise.difficulty}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            )}
+              ))}
+            </ScrollView>
 
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Duration (minutes)</Text>
@@ -278,11 +189,7 @@ const Workout = ({ dailyData }: WorkoutProps) => {
               />
             </View>
 
-            {calculatingCalories ? (
-              <View style={styles.caloriesContainer}>
-                <Text style={styles.caloriesText}>Calculating calories...</Text>
-              </View>
-            ) : calculatedCalories > 0 && (
+            {calculatedCalories > 0 && (
               <View style={styles.caloriesContainer}>
                 <Text style={styles.caloriesText}>
                   Estimated calories burned: {calculatedCalories} Cal
@@ -293,10 +200,10 @@ const Workout = ({ dailyData }: WorkoutProps) => {
             <TouchableOpacity
               style={[
                 styles.addButton,
-                (!selectedWorkout || !duration || calculatingCalories) && styles.addButtonDisabled
+                (!selectedWorkout || !duration) && styles.addButtonDisabled
               ]}
               onPress={handleAddWorkout}
-              disabled={!selectedWorkout || !duration || calculatingCalories}
+              disabled={!selectedWorkout || !duration}
             >
               <Text style={styles.addButtonText}>Add Workout</Text>
             </TouchableOpacity>
@@ -330,16 +237,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#333333',
+    paddingVertical: 5,
   },
   workoutTitle: {
     color: 'white',
     fontSize: 16,
     marginBottom: 10,
+    width: '40%',
+  },
+  workoutDuration: {
+    width: '30%',
   },
   workoutCalories: {
     color: '#FF5722',
     fontSize: 16,
     fontWeight: '600',
+    width: '30%',
   },
   workoutProgress: {
     flex: 1,
@@ -468,34 +383,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: '600',
-  },
-  loadingContainer: {
-    padding: 20,
-    alignItems: 'center',
-  },
-  loadingText: {
-    color: 'white',
-    fontSize: 16,
-  },
-  errorContainer: {
-    padding: 20,
-    alignItems: 'center',
-  },
-  errorText: {
-    color: '#FF5722',
-    fontSize: 16,
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  retryButton: {
-    backgroundColor: '#D9616A',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
-  },
-  retryButtonText: {
-    color: 'white',
-    fontSize: 16,
   },
   workoutDetails: {
     color: '#888',

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -173,11 +173,10 @@ const TrackingScreen = () => {
     }
   }, [newItem, imageUri, mealType]);
 
-  const loadDailyData = async () => {
+  const loadDailyData = useCallback(async () => {
     if (!selectedDate) return;
     try {
       const data = await getDailyData(selectedDate);
-
       if (!data) {
         const defaultData = {
           date: selectedDate,
@@ -197,7 +196,6 @@ const TrackingScreen = () => {
       }
     } catch (error) {
       console.error('Error loading daily data:', error);
-      // Set default data on error
       setDailyData({
         date: selectedDate,
         calories: { eaten: 0, burned: 0 },
@@ -211,7 +209,7 @@ const TrackingScreen = () => {
         ],
       });
     }
-  };
+  }, [selectedDate]);
 
   const handleDateSelect = (date: string) => {
     setSelectedDate(date);
@@ -333,7 +331,7 @@ const TrackingScreen = () => {
           ))}
         </View>
 
-        <Workout dailyData={dailyData} />
+        <Workout dailyData={dailyData} onDataChange={loadDailyData} />
       </ScrollView>
     </SafeAreaView>
   );

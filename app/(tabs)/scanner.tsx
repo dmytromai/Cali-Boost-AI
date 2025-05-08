@@ -137,8 +137,7 @@ const ScannerScreen = () => {
       }
 
       const responseText = geminiResponse.text;
-
-      console.log(responseText);
+      // console.log(responseText);
 
       // Extract nutritional information using regex
       const caloriesMatch = responseText.match(/Calories:[^\d]*(\d+)(?:\s*-\s*(\d+))?/i);

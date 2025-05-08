@@ -51,8 +51,7 @@ const WeightChart = () => {
       date: selectedDate.toISOString().split('T')[0],
       weight: parseFloat(weight)
     };
-
-    console.log(newEntry);
+    // console.log(newEntry);
 
     try {
       // Check if there's already data for this date
@@ -82,11 +81,11 @@ const WeightChart = () => {
   const onDateChange = (date?: string) => {
     setFirstLoad(false);
     setShowDatePicker(false);
-    console.log(date);
+    // console.log(date);
     if (date) {
       // Convert date string (YYYY/MM/DD) to Date object
       const [year, month, day] = date.split('/').map(Number);
-      const newDate = new Date(year, month - 1, day + 1); // month is 0-based in JavaScript Date
+      const newDate = new Date(year, month - 1, day); // month is 0-based in JavaScript Date
       setSelectedDate(newDate);
     }
   };
@@ -94,15 +93,13 @@ const WeightChart = () => {
   const formatChartData = () => {
     // Get start and end of current week
     const today = new Date();
+    // Set to Sunday of current week
     const startOfWeek = new Date(today);
-    // Set to Monday of current week
-    const day = today.getDay();
-    const diff = today.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
-    startOfWeek.setDate(diff);
+    startOfWeek.setDate(today.getDate() - today.getDay());
     startOfWeek.setHours(0, 0, 0, 0);
 
     const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6); // End on Sunday
+    endOfWeek.setDate(startOfWeek.getDate() + 6); // End on Saturday
     endOfWeek.setHours(23, 59, 59, 999);
 
     // Filter data for current week
@@ -122,11 +119,18 @@ const WeightChart = () => {
     }
 
     // Format data for chart
-    return sortedData.map(entry => ({
-      value: entry.weight,
-      label: new Date(entry.date).toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' }),
-      date: entry.date
-    }));
+    const res = sortedData.map(entry => {
+      const [year, month, day] = entry.date.split('-').map(Number);
+      const localDate = new Date(year, month - 1, day);
+      return {
+        value: entry.weight,
+        label: localDate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' }),
+        date: entry.date
+      };
+    });
+    // console.log("res: ", res);
+
+    return res;
   };
 
   return (
@@ -195,7 +199,14 @@ const WeightChart = () => {
               onPress={() => setShowDatePicker(true)}
             >
               <Text style={styles.dateButtonText}>
-                {firstLoad 
+                {
+                  selectedDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })
+                }
+                {/* {firstLoad 
                   ? selectedDate.toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
@@ -206,7 +217,7 @@ const WeightChart = () => {
                       month: 'long',
                       day: 'numeric'
                     })
-                }
+                } */}
               </Text>
             </TouchableOpacity>
 

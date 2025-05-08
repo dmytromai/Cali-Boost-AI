@@ -8,18 +8,15 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
-    "owner": "dmytroexpo",
+    "owner": "pinkpiggy",
     "extra": {
       "GEMINI_API_KEY": "AIzaSyCm15vu6S2GMBjUcuk3fB1OWcsgfVr77tQ",
-      "NINJAS_API_KEY": "Y/faL9+tNR4qr0vqlpZhTg==H0bga9tXKN3UnXiG",
-      "FATSECRET_CLIENT_ID": "40942e804f984b7e828a89b869f5043a",
-      "FATSECRET_CLIENT_SECRET": "6f04ae6d790a447091c027589c0ee9b0",
       "eas": {
-        "projectId": "ef4767ac-bfd9-46c4-bd0d-d48cf2867c0e"
+        "projectId": "cca6c5d4-006e-4d87-b9c6-999f2ce2f5f6"
       }
     },
     "updates": {
-      "url": "https://u.expo.dev/ef4767ac-bfd9-46c4-bd0d-d48cf2867c0e",
+      "url": "https://u.expo.dev/cca6c5d4-006e-4d87-b9c6-999f2ce2f5f6",
       "fallbackToCacheTimeout": 300000
     },
     "splash": {

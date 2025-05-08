@@ -32,9 +32,9 @@ const NutritionChart = () => {
     const dates = [];
     const today = new Date();
     
-    // Get the start of the week (Monday)
+    // Get the start of the week (Sunday)
     const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - today.getDay() + 1);
+    startOfWeek.setDate(today.getDate() - today.getDay());
     
     // Set the date range text
     const endOfWeek = new Date(startOfWeek);
@@ -73,9 +73,12 @@ const NutritionChart = () => {
       const weekData = [];
 
       for (const date of weekDates) {
+        const [year, month, day] = date.split('-').map(Number);
+        const localDate = new Date(year, month - 1, day);
+        const weekdayLabel = localDate.toLocaleDateString('en-US', { weekday: 'short' });
         const dailyData = await getDailyData(date);
         
-        if (dailyData) {
+        if (dailyData && dailyData.calories.eaten) {
           const percentages = calculateMacroPercentages(dailyData.macros);
           weekData.push({
             stacks: [
@@ -83,7 +86,7 @@ const NutritionChart = () => {
               { value: percentages.carbs, color: '#78B280', marginBottom: 2 },
               { value: percentages.fat, color: '#D98161', marginBottom: 2 },
             ],
-            label: new Date(date).toLocaleDateString('en-US', { weekday: 'short' }),
+            label: weekdayLabel,
           });
         } else {
           // Use sample data if no data exists for the date
@@ -93,7 +96,7 @@ const NutritionChart = () => {
               { value: 33, color: '#333333', marginBottom: 2 },
               { value: 34, color: '#333333', marginBottom: 2 },
             ],
-            label: new Date(date).toLocaleDateString('en-US', { weekday: 'short' }),
+            label: weekdayLabel,
           });
         }
       }
@@ -112,7 +115,6 @@ const NutritionChart = () => {
         <Text style={styles.sectionTitle}>Nutrition (%)</Text>
         <TouchableOpacity style={styles.dateSelector}>
           <Text style={styles.dateText}>{dateRange}</Text>
-          {/* <Ionicons name="chevron-forward" size={20} color="#888" /> */}
         </TouchableOpacity>
       </View>
       {loading ? (

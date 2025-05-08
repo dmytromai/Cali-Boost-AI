@@ -17,6 +17,14 @@ export interface MealSection {
   items: MealItem[];
 }
 
+export interface ExerciseEntry {
+  id: string;
+  name: string;
+  duration: number; // in minutes
+  calories: number;
+  time: string; // e.g., '14:30'
+}
+
 export interface DailyData {
   date: string;
   calories: {
@@ -30,6 +38,7 @@ export interface DailyData {
   };
   water: number;
   meals: MealSection[];
+  exercises?: ExerciseEntry[];
 }
 
 export interface FoodResponse {
