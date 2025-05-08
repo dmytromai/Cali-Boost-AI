@@ -4,11 +4,9 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
   Image,
   SafeAreaView,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import BackgroundImage from '@/components/layout/BackgroundImage';
 import ProfileHeader from '@/components/layout/ProfileHeader';
@@ -19,6 +17,7 @@ import { MealSection, DailyData } from '@/types';
 import { getDailyData, saveDailyData } from '@/utils/storage';
 import CircularProgress from '@/components/onboarding/CircularProgress';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Workout from '@/components/tracking/Workout';
 
 interface ProfileData {
   userActivity?: string;
@@ -334,29 +333,7 @@ const TrackingScreen = () => {
           ))}
         </View>
 
-        <View style={styles.burnedSection}>
-          <Text style={styles.sectionTitle}>Burned</Text>
-          <View style={styles.workoutItem}>
-            <View style={styles.workoutItemLeft}>
-              <Text style={styles.workoutTitle}>Walking</Text>
-              <Text style={styles.workoutCalories}>⚡{dailyData?.calories.burned || 0} Cal</Text>
-            </View>
-            <View style={styles.workoutProgress}>
-              <View style={styles.progressBarBackground}>
-                <View style={[styles.progressBar, { width: '60%', backgroundColor: '#FF5722' }]} />
-              </View>
-              <View style={styles.workoutStatsContainer}>
-                <Text style={styles.workoutStats}>0</Text>
-                <Text style={styles.workoutStats}>4000 Steps</Text>
-              </View>
-            </View>
-
-            <TouchableOpacity style={styles.addWorkoutButton}>
-              <Ionicons name="add-circle-outline" size={24} color="white" />
-              <Text style={styles.addWorkoutText}>Add More Workout</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <Workout dailyData={dailyData} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -470,66 +447,9 @@ const styles = StyleSheet.create({
   mealsContainer: {
     padding: 20,
   },
-  burnedSection: {
-    padding: 20,
-    marginBottom: 20,
-  },
-  workoutItem: {
-    backgroundColor: '#FFFFFF0D',
-    borderWidth: 1,
-    borderColor: '#FFFFFF1A',
-    borderRadius: 15,
-    padding: 15,
-    marginBottom: 15,
-  },
-  workoutTitle: {
-    color: 'white',
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  workoutProgress: {
-    flex: 1,
-    marginBottom: 10,
-  },
-  workoutStats: {
-    color: '#888',
-    fontSize: 12,
-    marginTop: 5,
-  },
-  workoutCalories: {
-    color: '#FF5722',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  addWorkoutButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-    backgroundColor: '#D9616A',
-    width: 200,
-    borderRadius: 12,
-    margin: 'auto',
-  },
-  addWorkoutText: {
-    color: 'white',
-    fontSize: 16,
-    marginLeft: 10,
-  },
   calorieCardImage: {
     width: 150,
     height: 150,
-  },
-  workoutItemLeft: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  workoutStatsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
   },
   statIcon: {
     width: 18,

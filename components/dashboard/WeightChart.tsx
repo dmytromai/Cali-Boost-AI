@@ -6,17 +6,21 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-// import { LineChart } from 'react-native-chart-kit';
+import { LineChart } from "react-native-gifted-charts"
 
 const WeightChart = () => {
-  // const weightData = {
-  //   labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-  //   datasets: [{
-  //     data: [75, 74, 73, 72, 71, 70, 69, 68, 67],
-  //     color: () => '#FF6B6B',
-  //     strokeWidth: 2,
-  //   }],
-  // };
+  const lineData = [
+    { value: 80, label: '' },
+    { value: 20, label: 'Feb' },
+    { value: 18, label: 'Mar' },
+    { value: 40, label: 'Apr' },
+    { value: 36, label: 'May' },
+    { value: 60, label: 'Jun' },
+    { value: 54, label: 'Jul' },
+    { value: 85, label: 'Aug' },
+    { value: 85, label: 'Aug' },
+    { value: 85, label: 'Aug' }
+  ];
 
   return (
     <View style={styles.section}>
@@ -26,24 +30,32 @@ const WeightChart = () => {
           <Text style={styles.addButtonText}>ADD</Text>
         </TouchableOpacity>
       </View>
-      <Image source={require('@/assets/images/weight-chart.png')} style={styles.weightChartImage} />
-      {/* <LineChart
-        data={weightData}
-        width={300}
-        height={220}
-        chartConfig={{
-          // backgroundColor: '#2A2A2A',
-          // backgroundGradientFrom: '#2A2A2A',
-          // backgroundGradientTo: '#2A2A2A',
-          decimalPlaces: 0,
-          color: (opacity = 1) => `rgba(255, 107, 107, ${opacity})`,
-          style: {
-            borderRadius: 16,
-          },
+      {/* <Image source={require('@/assets/images/weight-chart.png')} style={styles.weightChartImage} /> */}
+      <LineChart
+        areaChart
+        hideDataPoints
+        width={220}
+        isAnimated
+        rulesType='solid'
+        rulesColor='#222222'
+        animationDuration={1200}
+        startFillColor="#D9616A"
+        startOpacity={1}
+        endOpacity={0.3}
+        initialSpacing={0}
+        data={lineData}
+        spacing={30}
+        thickness={3}
+        yAxisColor="transparent"
+        xAxisColor="transparent"
+        color="#D9616A"
+        yAxisTextStyle={{
+          color: '#AAA',
         }}
-        bezier
-        style={styles.chart}
-      /> */}
+        xAxisLabelTextStyle={{
+          color: '#AAA',
+        }}
+      />
     </View>
   );
 };

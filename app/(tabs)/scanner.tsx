@@ -9,6 +9,7 @@ import {
   StatusBar,
   Image,
   ActivityIndicator,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
@@ -38,6 +39,7 @@ const ScannerScreen = () => {
   const [permission, requestPermission] = useCameraPermissions();
   const [foodResponse, setFoodResponse] = useState<{ food_response: FoodResponse[] } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedScanOption, setSelectedScanOption] = useState<'meal' | 'barcode' | 'label'>('meal');
 
   const cameraRef = useRef<CameraView>(null);
 
@@ -178,9 +180,9 @@ const ScannerScreen = () => {
       setFoodResponse(foodResponseData);
 
       handleFoodResponse(foodResponseData, imageUri, base64Data || undefined);
+      setIsLoading(false);
     } catch (error) {
       console.error("Gemini API processing error:", error);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -258,7 +260,7 @@ const ScannerScreen = () => {
 
     // Pass the updated data back to tracking screen
     router.replace({
-      pathname: '/(tabs)/tracking',
+      pathname: '/(tabs)/intake',
       params: {
         date,
         imageUri: encodedImageUri,
@@ -272,21 +274,38 @@ const ScannerScreen = () => {
     router.back();
   };
 
+  const handleScanOption = (option: 'meal' | 'barcode' | 'label') => {
+    setSelectedScanOption(option);
+    // Reset states when changing scan option
+    setImage(null);
+    setFoodResponse(null);
+    setIsLoading(false);
+  };
+
   const renderScanOptions = () => (
     <View style={styles.scanOptions}>
-      <TouchableOpacity style={[styles.scanOption, styles.scanOptionSelected]}>
-        <Image source={require('../../assets/icons/reserve.png')} style={styles.iconContainer} />
-        <Text style={[styles.optionText, styles.optionTextSelected]}>Scan Meal</Text>
+      <TouchableOpacity
+        style={[styles.scanOption, selectedScanOption === 'meal' && styles.scanOptionSelected]}
+        onPress={() => handleScanOption('meal')}
+      >
+        <Image source={selectedScanOption === 'meal' ? require('../../assets/icons/meal-selected.png') : require('../../assets/icons/meal.png')} style={styles.iconContainer} />
+        <Text style={[styles.optionText, selectedScanOption === 'meal' && styles.optionTextSelected]}>Scan Meal</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.scanOption}>
-        <Image source={require('../../assets/icons/barcode.png')} style={styles.iconContainer} />
-        <Text style={styles.optionText}>Barcode</Text>
+      <TouchableOpacity
+        style={[styles.scanOption, selectedScanOption === 'barcode' && styles.scanOptionSelected]}
+        onPress={() => handleScanOption('barcode')}
+      >
+        <Image source={selectedScanOption === 'barcode' ? require('../../assets/icons/barcode-selected.png') : require('../../assets/icons/barcode.png')} style={styles.iconContainer} />
+        <Text style={[styles.optionText, selectedScanOption === 'barcode' && styles.optionTextSelected]}>Barcode</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.scanOption}>
-        <Image source={require('../../assets/icons/tag-right.png')} style={styles.iconContainer} />
-        <Text style={styles.optionText}>Food Label</Text>
+      <TouchableOpacity
+        style={[styles.scanOption, selectedScanOption === 'label' && styles.scanOptionSelected]}
+        onPress={() => handleScanOption('label')}
+      >
+        <Image source={selectedScanOption === 'label' ? require('../../assets/icons/label-selected.png') : require('../../assets/icons/label.png')} style={styles.iconContainer} />
+        <Text style={[styles.optionText, selectedScanOption === 'label' && styles.optionTextSelected]}>Food Label</Text>
       </TouchableOpacity>
     </View>
   );
@@ -321,24 +340,27 @@ const ScannerScreen = () => {
               facing={facing}
               flash={flash}
             />}
+            {foodResponse && (
+              <View style={styles.foodResponseContainer}>
+                <Text style={styles.description}>Name: {foodResponse?.food_response[0].food_entry_name}</Text>
+                <Text style={styles.description}>Calories: {foodResponse?.food_response[0].eaten.total_nutritional_content.calories}kcal</Text>
+                <Text style={styles.description}>Protein: {foodResponse?.food_response[0].eaten.total_nutritional_content.protein}g</Text>
+                <Text style={styles.description}>Carb: {foodResponse?.food_response[0].eaten.total_nutritional_content.carbohydrate}g</Text>
+                <Text style={styles.description}>Fat: {foodResponse?.food_response[0].eaten.total_nutritional_content.fat}g</Text>
+              </View>
+            )}
           </View>
-          {isLoading ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#FF6B6B" />
-              <Text style={styles.loadingText}>Analyzing food...</Text>
-            </View>
-          ) : (
-            foodResponse && <>
-              <Text style={styles.description}>Name: {foodResponse?.food_response[0].food_entry_name}</Text>
-              <Text style={styles.description}>Calories: {foodResponse?.food_response[0].eaten.total_nutritional_content.calories}kcal</Text>
-              <Text style={styles.description}>Protein: {foodResponse?.food_response[0].eaten.total_nutritional_content.protein}g</Text>
-              <Text style={styles.description}>Carb: {foodResponse?.food_response[0].eaten.total_nutritional_content.carbohydrate}g</Text>
-              <Text style={styles.description}>Fat: {foodResponse?.food_response[0].eaten.total_nutritional_content.fat}g</Text>
-            </>
-          )}
         </View>
       </View>
 
+      {isLoading && (
+        <TouchableWithoutFeedback>
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#FF6B6B" />
+            <Text style={styles.loadingText}>Analyzing food...</Text>
+          </View>
+        </TouchableWithoutFeedback>
+      )}
 
       <View style={styles.controls}>
         <TouchableOpacity style={styles.controlButton} onPress={toggleFlash}>
@@ -503,21 +525,34 @@ const styles = StyleSheet.create({
     borderColor: '#FF6B6B',
     borderRadius: 50,
   },
-  description: {
-    fontSize: 20,
-    color: '#FF6B6B',
-    textAlign: 'center',
-  },
-  loadingContainer: {
+  foodResponseContainer: {
     position: 'absolute',
     top: '50%',
     left: '50%',
-    transform: [{ translateX: -50 }, { translateY: -50 }],
+    transform: [{ translateX: -width * 0.35 }, { translateY: -70 }],
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    padding: 15,
+    borderRadius: 10,
+    width: width * 0.7,
+    alignItems: 'center',
+    zIndex: 100,
+  },
+  description: {
+    fontSize: 16,
+    color: '#FF6B6B',
+    textAlign: 'center',
+    marginVertical: 2,
+  },
+  loadingContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    padding: 20,
-    borderRadius: 10,
+    zIndex: 1000,
   },
   loadingText: {
     color: 'white',

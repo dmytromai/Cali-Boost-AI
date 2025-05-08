@@ -7,7 +7,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, navigation }) => {
     switch (routeName) {
       case 'dashboard':
         return isFocused ? require('../../assets/icons/dashboard-selected.png') : require('../../assets/icons/dashboard.png');
-      case 'tracking':
+      case 'intake':
         return isFocused ? require('../../assets/icons/tracking-selected.png') : require('../../assets/icons/tracking.png');
       case 'scanner':
         return isFocused ? require('../../assets/icons/scanner.png') : require('../../assets/icons/scanner.png');

@@ -12,15 +12,15 @@ const ProfileHeader = () => {
     <View style={styles.header}>
       <View style={styles.welcomeContainer}>
         <Text style={styles.welcomeText}>Welcome 👋</Text>
-        <Text style={styles.userName}>Wade Thomas</Text>
+        {/* <Text style={styles.userName}>Wade Thomas</Text> */}
       </View>
       <View style={styles.profileContainer}>
         <TouchableOpacity>
           <Image source={require('../../assets/icons/notification.png')} style={styles.notificationIcon} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <Image source={require('../../assets/icons/avatar.png')} style={styles.notificationIcon} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );

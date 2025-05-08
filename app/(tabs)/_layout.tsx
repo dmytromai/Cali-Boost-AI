@@ -29,9 +29,9 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="tracking"
+          name="intake"
           options={{
-            title: 'Tracking',
+            title: 'Intake',
           }}
         />
         <Tabs.Screen

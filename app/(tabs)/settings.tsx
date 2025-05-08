@@ -47,7 +47,7 @@ const SettingsScreen = () => {
 
       <ScrollView style={styles.content}>
         {/* Profile Section */}
-        <View style={styles.profileSection}>
+        {/* <View style={styles.profileSection}>
           <View style={styles.profileInfo}>
             <Image source={require('../../assets/icons/avatar.png')} style={styles.profileImage} />
             <View style={styles.profileText}>
@@ -59,10 +59,10 @@ const SettingsScreen = () => {
           <TouchableOpacity>
             <Image source={require('../../assets/icons/logout.png')} style={styles.logoutIcon} width={24} height={24} />
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         {/* Subscription Section */}
-        <View style={styles.section}>
+        <View style={[styles.section, styles.profileSection]}>
           <View style={styles.sectionHeader}>
             <Image source={require('../../assets/icons/my-subscription.png')} style={styles.menuIcon} />
             <Text style={styles.sectionTitle}>My Subscription</Text>
