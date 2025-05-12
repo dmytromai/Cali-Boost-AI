@@ -1,7 +1,9 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, ScrollView, Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import BackgroundImage from '@/components/layout/BackgroundImage';
+import EditProfileModal from '@/components/settings/EditProfile';
+import ContactUsModal from '@/components/settings/ContactUs';
 
 interface MenuItemProps {
   icon: string;
@@ -26,8 +28,18 @@ const MenuItem: React.FC<MenuItemProps> = ({ icon, title, onPress, showVersion, 
 );
 
 const SettingsScreen = () => {
+  const [editProfileVisible, setEditProfileVisible] = useState(false);
+  const [contactUsVisible, setContactUsVisible] = useState(false);
+
+  const handleOpenPrivacy = () => {
+    Linking.openURL('https://sites.google.com/view/puffmeter-privacy-policy/home?authuser=1');
+  };
+  const handleOpenTerms = () => {
+    Linking.openURL('https://sites.google.com/view/puffmate-terms-conditions/home?authuser=1');
+  };
+
   const generalSettings: MenuItemProps[] = [
-    { icon: require('../../assets/icons/edit-profile.png'), title: 'Edit Profile', onPress: () => { } },
+    { icon: require('../../assets/icons/edit-profile.png'), title: 'Edit Profile', onPress: () => setEditProfileVisible(true) },
     { icon: require('../../assets/icons/notification-preferences.png'), title: 'Notification Preferences', onPress: () => { } },
     { icon: require('../../assets/icons/language.png'), title: 'Language', onPress: () => { } },
     { icon: require('../../assets/icons/tracking-goals.png'), title: 'Tracking & Goals', onPress: () => { } },
@@ -35,9 +47,9 @@ const SettingsScreen = () => {
   ];
 
   const privacySettings: MenuItemProps[] = [
-    { icon: require('../../assets/icons/help-support.png'), title: 'Help & Support', onPress: () => { } },
-    { icon: require('../../assets/icons/terms-conditions.png'), title: 'Terms & Conditions', onPress: () => { } },
-    { icon: require('../../assets/icons/contact-us.png'), title: 'Contact Us', onPress: () => { } },
+    { icon: require('../../assets/icons/help-support.png'), title: 'Privacy', onPress: handleOpenPrivacy },
+    { icon: require('../../assets/icons/terms-conditions.png'), title: 'Terms & Conditions', onPress: handleOpenTerms },
+    { icon: require('../../assets/icons/contact-us.png'), title: 'Contact Us', onPress: () => setContactUsVisible(true) },
     { icon: require('../../assets/icons/app-version.png'), title: 'App Version', onPress: () => { } },
   ];
 
@@ -97,6 +109,8 @@ const SettingsScreen = () => {
           ))}
         </View>
       </ScrollView>
+      <EditProfileModal visible={editProfileVisible} onClose={() => setEditProfileVisible(false)} />
+      <ContactUsModal visible={contactUsVisible} onClose={() => setContactUsVisible(false)} />
     </SafeAreaView>
   );
 };

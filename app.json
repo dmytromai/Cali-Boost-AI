@@ -11,6 +11,7 @@
     "owner": "pinkpiggy",
     "extra": {
       "GEMINI_API_KEY": "AIzaSyCm15vu6S2GMBjUcuk3fB1OWcsgfVr77tQ",
+      "CONTACT_EMAIL": "beconnect365@gmail.com",
       "eas": {
         "projectId": "cca6c5d4-006e-4d87-b9c6-999f2ce2f5f6"
       }

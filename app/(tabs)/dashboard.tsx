@@ -14,11 +14,7 @@ import ProfileHeader from '@/components/layout/ProfileHeader';
 import WeightChart from '@/components/dashboard/WeightChart';
 import NutritionChart from '@/components/dashboard/NutritionChart';
 import BMIChart from '@/components/dashboard/BMIChart';
-
-interface ActivityLevel {
-  label: string;
-  calories: number;
-}
+import CalorieBudget from '@/components/dashboard/CalorieBudget';
 
 interface ProfileData {
   userBirthdate?: string;
@@ -98,14 +94,6 @@ const DashboardScreen = () => {
     loadProfileData();
   }, []);
 
-  const activityLevels: ActivityLevel[] = [
-    { label: 'Basal metabolic rate', calories: 1654 },
-    { label: 'Inactive', calories: 1985 },
-    { label: 'Somewhat active', calories: 2275 },
-    { label: 'Moderate Active', calories: 2563 },
-    { label: 'Very Active', calories: 2895 },
-  ];
-
   const renderProfileCard = (title: string, value: string | number | undefined, icon: any, suffix: string = '') => (
     <View style={styles.profileCard}>
       <View style={styles.cardContent}>
@@ -146,21 +134,7 @@ const DashboardScreen = () => {
         </View>
 
         {/* Calories Budget */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Calories Budget</Text>
-            <Image source={require('../../assets/icons/calories-budget.png')} style={styles.caloriesBudgetIcon} />
-          </View>
-          <Text style={styles.caloriesValue}>2663 cal/day</Text>
-          <View style={styles.activityLevels}>
-            {activityLevels.map((level, index) => (
-              <View key={index} style={styles.activityItem}>
-                <Text style={styles.activityLabel}>{level.label}</Text>
-                <Text style={styles.activityCalories}>{level.calories} cal/day</Text>
-              </View>
-            ))}
-          </View>
-        </View>
+        <CalorieBudget />
 
         {/* BMI Chart */}
         <BMIChart />
@@ -223,55 +197,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
-  section: {
-    padding: 20,
-    backgroundColor: '#FFFFFF0D',
-    marginHorizontal: 20,
-    marginVertical: 6,
-    borderRadius: 20,
-    borderColor: '#FFFFFF1A',
-    borderWidth: 1,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  sectionTitle: {
-    color: '#FFFFFF99',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  caloriesValue: {
-    color: 'white',
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  activityLevels: {
-    marginTop: 10,
-  },
-  activityItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
-  activityLabel: {
-    color: '#888',
-    fontSize: 14,
-  },
-  activityCalories: {
-    color: 'white',
-    fontSize: 14,
-  },
   cardIcon: {
     width: 36,
     height: 36,
   },
-  caloriesBudgetIcon: {
-    width: 36,
-    height: 36,
-  }
 });
 
 export default DashboardScreen; 

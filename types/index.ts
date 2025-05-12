@@ -55,3 +55,13 @@ export interface FoodResponse {
     };
   };
 }
+
+export interface Challenge {
+  id: string;
+  title: string;
+  calories?: number;
+  image?: string;
+  description?: string;
+  type: 'meal' | 'exercise' | 'challenge';
+  buttonText?: string;
+}
