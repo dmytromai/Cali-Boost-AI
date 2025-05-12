@@ -195,6 +195,7 @@ const styles = StyleSheet.create({
     height: 78,
     position: 'absolute',
     top: 65,
+    transformOrigin: '39px 60px',
   },
 });
 

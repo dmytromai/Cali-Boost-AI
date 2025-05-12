@@ -19,7 +19,11 @@ interface WeightEntry {
 
 const WeightChart = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    return yesterday;
+  });
   const [weight, setWeight] = useState('');
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [weightData, setWeightData] = useState<WeightEntry[]>([]);
@@ -109,7 +113,7 @@ const WeightChart = () => {
     });
 
     // Sort by date
-    const sortedData = weekData.sort((a, b) => 
+    const sortedData = weekData.sort((a, b) =>
       new Date(a.date).getTime() - new Date(b.date).getTime()
     );
 
@@ -194,30 +198,30 @@ const WeightChart = () => {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.dateButton}
               onPress={() => setShowDatePicker(true)}
             >
               <Text style={styles.dateButtonText}>
-                {
+                {/* {
                   selectedDate.toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
                   })
-                }
-                {/* {firstLoad 
-                  ? selectedDate.toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })
-                  : new Date(selectedDate.getTime() - 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })
                 } */}
+                {firstLoad
+                  ? new Date(selectedDate.getTime() + 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })
+                  : selectedDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })
+                }
               </Text>
             </TouchableOpacity>
 
