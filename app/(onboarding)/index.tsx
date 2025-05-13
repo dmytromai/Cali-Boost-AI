@@ -68,8 +68,8 @@ export default function WelcomeScreen() {
   });
 
   const handleComplete = () => {
-    checkExperience();
-    // router.push('/(onboarding)/personalize');
+    // checkExperience();
+    router.push('/(onboarding)/personalize');
   };
 
   const handleProgress = (progress: number) => {

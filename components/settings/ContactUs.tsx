@@ -31,7 +31,7 @@ const ContactUsModal: React.FC<ContactUsModalProps> = ({ visible, onClose }) => 
     }
     setSending(true);
     const email = CONTACT_EMAIL;
-    const subject = encodeURIComponent('App Support');
+    const subject = encodeURIComponent("Cali Boost Ai's Support");
     const body = encodeURIComponent(message);
     const link = `mailto:${email}?subject=${subject}&body=${body}`;
     try {

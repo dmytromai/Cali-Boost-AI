@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image } from 'react-native';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import OnboardingButton from '@/components/onboarding/OnboardingButton';
@@ -49,7 +49,7 @@ export default function OnboardingGender() {
             ]}
             onPress={() => setSelectedGender('male')}
           >
-            <Text style={styles.genderSymbol}>♂</Text>
+            <Image source={selectedGender === 'male' ? require('../../assets/icons/male-selected.png') : require('../../assets/icons/male.png')}  style={styles.iconContainer}/>
             <Text style={styles.genderText}>Male</Text>
           </TouchableOpacity>
 
@@ -60,7 +60,7 @@ export default function OnboardingGender() {
             ]}
             onPress={() => setSelectedGender('female')}
           >
-            <Text style={styles.genderSymbol}>♀</Text>
+            <Image source={selectedGender === 'female' ? require('../../assets/icons/female-selected.png') : require('../../assets/icons/female.png')}  style={styles.iconContainer} />
             <Text style={styles.genderText}>Female</Text>
           </TouchableOpacity>
         </View>
@@ -131,5 +131,10 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: {
     opacity: 0.5,
+  },
+  iconContainer: {
+    width: 56,
+    height: 56,
+    margin: 20,
   },
 }); 

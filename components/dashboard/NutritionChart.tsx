@@ -31,35 +31,35 @@ const NutritionChart = () => {
   const getWeekDates = () => {
     const dates = [];
     const today = new Date();
-    
+
     // Get the start of the week (Sunday)
     const startOfWeek = new Date(today);
     startOfWeek.setDate(today.getDate() - today.getDay());
-    
+
     // Set the date range text
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(startOfWeek.getDate() + 6);
-    
+
     const formatDate = (date: Date) => {
       return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     };
-    
+
     setDateRange(`${formatDate(startOfWeek)} - ${formatDate(endOfWeek)}`);
-    
+
     // Generate dates for the week
     for (let i = 0; i < 7; i++) {
       const date = new Date(startOfWeek);
       date.setDate(startOfWeek.getDate() + i);
       dates.push(date.toISOString().split('T')[0]);
     }
-    
+
     return dates;
   };
 
   const calculateMacroPercentages = (macros: { protein: number; carbs: number; fat: number }) => {
     const total = macros.protein + macros.carbs + macros.fat;
     if (total === 0) return { protein: 0, carbs: 0, fat: 0 };
-    
+
     return {
       protein: Math.round((macros.protein / total) * 100),
       carbs: Math.round((macros.carbs / total) * 100),
@@ -77,7 +77,7 @@ const NutritionChart = () => {
         const localDate = new Date(year, month - 1, day);
         const weekdayLabel = localDate.toLocaleDateString('en-US', { weekday: 'short' });
         const dailyData = await getDailyData(date);
-        
+
         if (dailyData && dailyData.calories.eaten) {
           const percentages = calculateMacroPercentages(dailyData.macros);
           weekData.push({
@@ -145,6 +145,20 @@ const NutritionChart = () => {
           }}
         />
       )}
+      <View style={styles.labelContainer}>
+        <View style={styles.proteinContainer}>
+          <View style={styles.dotProtein}></View>
+          <Text style={styles.proteinText}>Protein</Text>
+        </View>
+        <View style={styles.proteinContainer}>
+          <View style={styles.dotCarbs}></View>
+          <Text style={styles.proteinText}>Carbs</Text>
+        </View>
+        <View style={styles.proteinContainer}>
+          <View style={styles.dotFat}></View>
+          <Text style={styles.proteinText}>Fat</Text>
+        </View>
+      </View>
     </View>
   );
 };
@@ -183,6 +197,38 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     marginVertical: 20,
+  },
+  labelContainer: {
+    marginTop: 15,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 50,
+  },
+  proteinContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6
+  },
+  dotProtein: {
+    backgroundColor: '#6187D9',
+    borderRadius: 100,
+    width: 12,
+    height: 12,
+  },
+  proteinText: {
+    color: 'white',
+  },
+  dotCarbs: {
+    backgroundColor: '#78B280',
+    borderRadius: 100,
+    width: 12,
+    height: 12,
+  },
+  dotFat: {
+    backgroundColor: '#D98161',
+    borderRadius: 100,
+    width: 12,
+    height: 12,
   },
 });
 
