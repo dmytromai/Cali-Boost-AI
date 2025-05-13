@@ -16,7 +16,7 @@ export const EXERCISE_ITEMS: Challenge[] = [
     description: 'High Knees: 3 sets of 30 seconds\nLateral Shuffles: 3 sets of 15-20 seconds\nCone Drills (zig-zag sprint): 3 rounds, 20 meters each\nBurpees: 2 sets of 12 reps\nCooldown Stretch: Focus on hip flexors and hamstrings',
     calories: 300,
     type: 'exercise',
-    image: require('../assets/images/exercise-item.jpg'),
+    image: require('../assets/images/exercise-item2.jpg'),
     buttonText: 'View Details',
   },
   {
@@ -25,7 +25,7 @@ export const EXERCISE_ITEMS: Challenge[] = [
     description: '10-minute jog or brisk walk to warm up\nSprint Intervals: 30 seconds sprint, 60 seconds walk (6 rounds)\nStair Running: 3 sets of 2 minutes each\nCooldown Walk: 5-10 minutes',
     calories: 400,
     type: 'exercise',
-    image: require('../assets/images/exercise-item.jpg'),
+    image: require('../assets/images/exercise-item3.jpg'),
     buttonText: 'View Details',
   },
   {
@@ -34,7 +34,7 @@ export const EXERCISE_ITEMS: Challenge[] = [
     description: 'Yoga or Stretching: 20-30 minutes\nSide Plank: 3 sets, hold for 20-30 seconds per side\nBird Dogs: 3 sets of 10 reps per side\nFoam Rolling: Focus on calves, quads, and back',
     calories: 200,
     type: 'exercise',
-    image: require('../assets/images/exercise-item.jpg'),
+    image: require('../assets/images/exercise-item4.jpg'),
     buttonText: 'View Details',
   },
   {
@@ -43,7 +43,7 @@ export const EXERCISE_ITEMS: Challenge[] = [
     description: 'Box Jumps: 3 sets of 10 reps\nBroad Jumps: 3 sets of 8 reps\nSkater Hops: 3 sets of 10 reps per side\nMedicine Ball Slams: 3 sets of 15 reps\nCooldown Stretch: Focus on quads and shoulders',
     calories: 380,
     type: 'exercise',
-    image: require('../assets/images/exercise-item.jpg'),
+    image: require('../assets/images/exercise-item5.jpg'),
     buttonText: 'View Details',
   },
   {
@@ -52,7 +52,7 @@ export const EXERCISE_ITEMS: Challenge[] = [
     description: 'Choose a sport-like activity to simulate game movements:\n• Basketball Dribbling/Jump Shots: 20 minutes\n• Soccer Dribbling/Passing Drills: 20 minutes\n• Tennis Footwork Drills: 20 minutes',
     calories: 320,
     type: 'exercise',
-    image: require('../assets/images/exercise-item.jpg'),
+    image: require('../assets/images/exercise-item6.jpg'),
     buttonText: 'View Details',
   },
   {
@@ -61,7 +61,7 @@ export const EXERCISE_ITEMS: Challenge[] = [
     description: 'Yoga or Pilates: 30-40 minutes\nFoam Rolling: Full body',
     calories: 150,
     type: 'exercise',
-    image: require('../assets/images/exercise-item.jpg'),
+    image: require('../assets/images/exercise-item7.jpg'),
     buttonText: 'View Details',
   },
 ]; 

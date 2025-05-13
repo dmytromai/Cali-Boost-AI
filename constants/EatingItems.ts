@@ -16,7 +16,7 @@ export const EATING_ITEMS: Challenge[] = [
     description: 'Breakfast:\n• Oatmeal topped with sliced bananas, peanut butter, and cinnamon\n• Black coffee or green tea\n\nSnack:\n• A boiled egg and raw carrot sticks\n\nLunch:\n• Grilled turkey burger (no bun) with avocado, tomato, and lettuce wrap\n• Side of roasted zucchini and quinoa\n\nSnack:\n• Protein smoothie with almond milk, berries, spinach, and whey protein\n\nDinner:\n• Stir-fried shrimp with brown rice and mixed vegetables\n• Cucumber salad with sesame dressing',
     calories: 2100,
     type: 'meal',
-    image: require('../assets/images/eating-item.jpg'),
+    image: require('../assets/images/eating-item2.jpg'),
     buttonText: 'View Details',
   },
   {
@@ -25,7 +25,7 @@ export const EATING_ITEMS: Challenge[] = [
     description: 'Breakfast:\n• Chia pudding with almond milk, mango slices, and coconut\n• Herbal tea\n\nSnack:\n• A small handful of walnuts and a pear\n\nLunch:\n• Grilled chicken Caesar salad with homemade dressing\n• Whole-grain croutons and Parmesan cheese\n\nSnack:\n• Sliced cucumbers with hummus\n\nDinner:\n• Lean beef stir-fry with bell peppers, onions, and mushrooms\n• Side of cauliflower rice',
     calories: 2150,
     type: 'meal',
-    image: require('../assets/images/eating-item.jpg'),
+    image: require('../assets/images/eating-item3.jpg'),
     buttonText: 'View Details',
   },
   {
@@ -34,7 +34,7 @@ export const EATING_ITEMS: Challenge[] = [
     description: 'Breakfast:\n• Scrambled egg whites with smoked salmon, dill, and whole-grain toast\n• Sliced grapefruit\n\nSnack:\n• Low-fat cottage cheese with pineapple chunks\n\nLunch:\n• Grilled tuna steak on spinach, arugula, and cherry tomatoes\n• Balsamic vinaigrette dressing\n\nSnack:\n• A protein bar (low sugar, high protein)\n\nDinner:\n• Roast chicken with Brussels sprouts and mashed sweet potatoes',
     calories: 2050,
     type: 'meal',
-    image: require('../assets/images/eating-item.jpg'),
+    image: require('../assets/images/eating-item4.jpg'),
     buttonText: 'View Details',
   },
   {
@@ -43,7 +43,7 @@ export const EATING_ITEMS: Challenge[] = [
     description: 'Breakfast:\n• Smoothie bowl with spinach, banana, berries, almond milk\n• Topped with granola and pumpkin seeds\n\nSnack:\n• Sliced bell peppers and guacamole\n\nLunch:\n• Grilled turkey breast with green beans and baked sweet potato\n\nSnack:\n• Hard-boiled egg and cashews\n\nDinner:\n• Baked cod with quinoa and roasted carrots\n• Mixed greens with olive oil and vinegar',
     calories: 2080,
     type: 'meal',
-    image: require('../assets/images/eating-item.jpg'),
+    image: require('../assets/images/eating-item5.jpg'),
     buttonText: 'View Details',
   },
   {
@@ -52,7 +52,7 @@ export const EATING_ITEMS: Challenge[] = [
     description: 'Breakfast:\n• Omelet with mushrooms, onions, and spinach, topped with salsa\n• A small side of avocado\n\nSnack:\n• A handful of trail mix (no added sugar)\n\nLunch:\n• Grilled chicken breast with Mediterranean salad\n• (cucumber, olives, cherry tomatoes, red onion, feta)\n\nSnack:\n• Protein shake with almond milk and protein powder\n\nDinner:\n• Grilled lamb chops with roasted garlic green beans\n• Mashed cauliflower',
     calories: 2250,
     type: 'meal',
-    image: require('../assets/images/eating-item.jpg'),
+    image: require('../assets/images/eating-item6.jpg'),
     buttonText: 'View Details',
   },
   {
@@ -61,7 +61,7 @@ export const EATING_ITEMS: Challenge[] = [
     description: 'Breakfast:\n• Greek yogurt parfait with granola, sliced kiwi, and chia seeds\n• Green tea\n\nSnack:\n• A boiled egg and a small orange\n\nLunch:\n• Pan-seared salmon with brown rice and sautéed spinach\n\nSnack:\n• Celery sticks with almond butter\n\nDinner:\n• Herb-marinated grilled chicken with roasted sweet potatoes\n• Side of kale salad',
     calories: 2100,
     type: 'meal',
-    image: require('../assets/images/eating-item.jpg'),
+    image: require('../assets/images/eating-item7.jpg'),
     buttonText: 'View Details',
   },
 ]; 
