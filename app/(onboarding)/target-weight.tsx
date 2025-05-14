@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   },
   highlightBox: {
     position: 'absolute',
-    top: '40%',
+    top: ITEM_HEIGHT * CENTER_INDEX,
     left: 0,
     right: 0,
     height: ITEM_HEIGHT,
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   pickerItem: {
     color: '#888',
     fontSize: 16,
-    height: ITEM_HEIGHT,
+    lineHeight: ITEM_HEIGHT,
     textAlign: 'center',
     textAlignVertical: 'center',
   },

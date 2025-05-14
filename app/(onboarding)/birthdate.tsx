@@ -197,11 +197,10 @@ const styles = StyleSheet.create({
   },
   highlightBox: {
     position: 'absolute',
-    top: '40%',
+    top: ITEM_HEIGHT * CENTER_INDEX,
     left: 0,
     right: 0,
     height: ITEM_HEIGHT,
-    // backgroundColor: '#FFFFFF0D',
     borderRadius: 8,
     zIndex: 1,
   },
@@ -232,7 +231,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     height: ITEM_HEIGHT,
     textAlign: 'center',
-    textAlignVertical: 'center',
+    lineHeight: ITEM_HEIGHT,
   },
   selectedItem: {
     color: '#FF6B6B',

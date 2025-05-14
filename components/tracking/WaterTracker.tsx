@@ -48,7 +48,9 @@ const WaterTracker: React.FC<WaterTrackerProps> = ({ onWaterUpdate, initialAmoun
             waveAnimateTime: 3000,
           }}
         />
-        <Text style={styles.waterAmount}>{totalWater}ml</Text>
+        <View style={styles.centeredTextContainer}>
+          <Text style={styles.waterAmount}>{totalWater}ml</Text>
+        </View>
       </View>
       <View style={styles.waterButtons}>
         <TouchableOpacity
@@ -102,18 +104,20 @@ const styles = StyleSheet.create({
   },
   waterGraphContainer: {
     alignItems: 'center',
+    justifyContent: 'center',
     marginVertical: 20,
     position: 'relative',
+  },
+  centeredTextContainer: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+    pointerEvents: 'none', // So it doesn't block touches
   },
   waterAmount: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
-    marginTop: 15,
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: [{ translateX: '-50%' }, { translateY: '-50%' }],
   },
   waterButtons: {
     flexDirection: 'row',
