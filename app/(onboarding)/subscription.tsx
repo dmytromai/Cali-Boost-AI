@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Image,
+  Linking,
 } from 'react-native';
 import { router } from 'expo-router';
 import BackgroundImage from '@/components/layout/BackgroundImage';
@@ -14,6 +15,13 @@ import OnboardingProgressBar from '@/components/onboarding/OnboardingProgressBar
 export default function SubscriptionScreen() {
   const handleGetStarted = () => {
     router.push('/(tabs)/dashboard');
+  };
+
+  const handleOpenPrivacy = () => {
+    Linking.openURL('https://sites.google.com/view/puffmeter-privacy-policy/home?authuser=1');
+  };
+  const handleOpenTerms = () => {
+    Linking.openURL('https://sites.google.com/view/puffmate-terms-conditions/home?authuser=1');
   };
 
   return (
@@ -66,13 +74,13 @@ export default function SubscriptionScreen() {
         </TouchableOpacity>
 
         <View style={styles.footer}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenTerms}>
             <Text style={styles.footerLink}>Terms & Condition</Text>
           </TouchableOpacity>
           <TouchableOpacity>
             <Text style={styles.footerLink}>Restore Purchase</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenPrivacy}>
             <Text style={styles.footerLink}>Privacy Policy</Text>
           </TouchableOpacity>
         </View>
