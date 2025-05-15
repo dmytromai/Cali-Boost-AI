@@ -31,7 +31,7 @@ const ResourceScreen = () => {
       title: 'Hydration Challenge',
       description: '8 glasses of water every day',
       type: 'challenge',
-      image: require('../../assets/images/hydration-challenge.png'),
+      image: require('../../assets/images/hydration-challenge.jpg'),
       buttonText: 'Start',
     },
   ];
@@ -42,7 +42,7 @@ const ResourceScreen = () => {
       title: '7-Day Move More Challenge',
       description: 'Do at least 30 minutes of any physical activity',
       type: 'challenge',
-      image: require('../../assets/images/rainbow-challenge.png'),
+      image: require('../../assets/images/physical-activity.jpg'),
       buttonText: 'Start',
     },
     {
@@ -50,7 +50,7 @@ const ResourceScreen = () => {
       title: '10K Steps-a-Day Challenge',
       description: 'Hit 10,000 steps daily for 14 days straight',
       type: 'challenge',
-      image: require('../../assets/images/hydration-challenge.png'),
+      image: require('../../assets/images/steps-image.jpg'),
       buttonText: 'Start',
     },
   ];
